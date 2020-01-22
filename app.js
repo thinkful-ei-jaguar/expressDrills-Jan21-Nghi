@@ -7,10 +7,25 @@ const app = express();
 
 // Drill 1
 app.get('/sum', (req,res) => {
-  const query = req.query;
+  const {a, b} = req.query;
+  // Data validation
+  if(!a) {
+    return res.status(400).send('a is required');
+  }
+  if(!b) {
+    return res.status(400).send('b is required');
+  }
+  // Check if a and b are numbers
+  if(Number.isNaN(a)) {
+    return res.status(400).send('a must be a number');
+  }
+  if(Number.isNaN(b)) {
+    return res.status(400).send('b must be a number');
+  }
+
   // convert parameters to numbers and add
-  const sum = Number(query.a) + Number(query.b);
-  res.send(`The sum of ${query.a} and ${query.b} is ${sum}`);
+  const sum = Number(a) + Number(b);
+  res.send(`The sum of ${a} and ${b} is ${sum}`);
 });
 
 // Drill 2 - Caesar Cipher
@@ -19,6 +34,16 @@ app.get('/cipher', (req, res) => {
   const text = req.query.text.split('');
   // Convert to number and store
   const shift = Number(req.query.shift);
+  // Data validation
+  if(!text) {
+    return res.status(400).send('must provide text');
+  }
+  if(!shift) {
+    return res.status(400).send('must provide shift');
+  }
+  if(Number.isNaN(shift)) {
+    return res.status(400).send('shift must be a number');
+  }
   // For each char, gets the string of the char code after shifted
   const shiftedText = text.map(char => {
     const num = char.charCodeAt(0) + shift;
